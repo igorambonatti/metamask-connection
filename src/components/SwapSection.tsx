@@ -178,8 +178,8 @@ const SwapSection: React.FC = () => {
         </button>
       </div>
 
-      {error && <p className="text-red-500 mt-5">Error: {error}</p>}
-      {result && <p>Result: {result}</p>}
+      {error && <p className="text-red-500 mt-5">{error}</p>}
+      {result && <p className="text-green-500 mt-5">{result}</p>}
     </div>
   );
 };
