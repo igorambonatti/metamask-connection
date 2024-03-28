@@ -111,6 +111,7 @@ const SwapSection: React.FC = () => {
         ...prevSwapState,
         error: null,
         loading: true,
+        result: null,
       }));
 
       const accounts = await window.ethereum.request({
