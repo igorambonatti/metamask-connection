@@ -34,10 +34,15 @@ const SwapSection: React.FC = () => {
   const { loading, result, error } = swapState;
 
   useEffect(() => {
-    async function loadWeb3() {
+    loadWeb3();
+  }, []);
+
+  const loadWeb3 = async () => {
+    try {
       if (typeof window.ethereum !== "undefined") {
         const web3Instance = new Web3(window.ethereum);
         setWeb3(web3Instance);
+
         const deployedContract = new web3Instance.eth.Contract(
           bittexAbi as any,
           contractAddress
@@ -57,10 +62,10 @@ const SwapSection: React.FC = () => {
           }));
         }
       }
+    } catch (error) {
+      console.error("Failed to load Web3:", error);
     }
-
-    loadWeb3();
-  }, []);
+  };
 
   const connectMetaMask = async () => {
     try {
