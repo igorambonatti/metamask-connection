@@ -12,6 +12,7 @@ const initialWalletState = {
   metaMaskConnected: false,
   walletAddress: null as string | null,
   contract: null as Contract<any> | null,
+  connectLoading: false,
 };
 
 type WalletState = typeof initialWalletState;
@@ -30,7 +31,8 @@ const SwapSection: React.FC = () => {
     useState<WalletState>(initialWalletState);
   const [swapState, setSwapState] = useState<SwapState>(initialSwapState);
 
-  const { metaMaskConnected, walletAddress, contract } = walletState;
+  const { metaMaskConnected, walletAddress, contract, connectLoading } =
+    walletState;
   const { loading, result, error } = swapState;
 
   useEffect(() => {
@@ -69,6 +71,10 @@ const SwapSection: React.FC = () => {
 
   const connectMetaMask = async () => {
     try {
+      setWalletState((prevWalletState) => ({
+        ...prevWalletState,
+        connectLoading: true,
+      }));
       if (!web3) throw new Error("Web3 not initialized");
       await window.ethereum.enable();
       const accounts = await window.ethereum.request({
@@ -85,6 +91,11 @@ const SwapSection: React.FC = () => {
       setSwapState((prevSwapState) => ({
         ...prevSwapState,
         error: (error as Error).message,
+      }));
+    } finally {
+      setWalletState((prevWalletState) => ({
+        ...prevWalletState,
+        connectLoading: false,
       }));
     }
   };
@@ -161,9 +172,14 @@ const SwapSection: React.FC = () => {
       <div className="flex gap-5">
         <button
           onClick={connectMetaMask}
-          className="bg-green-500 text-white px-4 py-2 rounded truncate"
+          className={`bg-green-500 text-white px-4 py-2 rounded truncate ${
+            connectLoading ? "opacity-50 cursor-not-allowed" : ""
+          }`}
+          disabled={metaMaskConnected || connectLoading}
         >
-          {metaMaskConnected
+          {connectLoading
+            ? "Loading..."
+            : metaMaskConnected
             ? `Connected: ${truncateString(walletAddress!, 15)}`
             : "Connect with MetaMask"}
         </button>
