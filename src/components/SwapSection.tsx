@@ -5,15 +5,6 @@ import { Contract } from "web3-eth-contract";
 import { truncateString } from "@/utils/truncateString";
 import useWallet from "@/hooks/useWallet";
 
-const initialWalletState = {
-  metaMaskConnected: false,
-  walletAddress: null as string | null,
-  contract: null as Contract<any> | null,
-  connectLoading: false,
-};
-
-type WalletState = typeof initialWalletState;
-
 const initialSwapState = {
   loading: false,
   result: null as string | null,
@@ -24,7 +15,6 @@ type SwapState = typeof initialSwapState;
 
 const SwapSection: React.FC = () => {
   const { web3, walletState, setWalletState } = useWallet();
-  useState<WalletState>(initialWalletState);
   const [swapState, setSwapState] = useState<SwapState>(initialSwapState);
 
   const { metaMaskConnected, walletAddress, contract, connectLoading } =

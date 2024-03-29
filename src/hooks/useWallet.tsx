@@ -5,14 +5,19 @@ import bittexAbi from "../bittex.json";
 
 const contractAddress = "0xCA3f028bB42C01036DbFc5fF20a3e6C58Fe0Acf1";
 
+const initialWalletState = {
+  metaMaskConnected: false,
+  walletAddress: null as string | null,
+  contract: null as Contract<any> | null,
+  connectLoading: false,
+};
+
+type WalletState = typeof initialWalletState;
+
 const useWallet = () => {
   const [web3, setWeb3] = useState<Web3 | null>(null);
-  const [walletState, setWalletState] = useState({
-    metaMaskConnected: false,
-    walletAddress: null as string | null,
-    contract: null as Contract<any> | null,
-    connectLoading: false,
-  });
+  const [walletState, setWalletState] =
+    useState<WalletState>(initialWalletState);
 
   const loadWeb3AndContract = async () => {
     try {
